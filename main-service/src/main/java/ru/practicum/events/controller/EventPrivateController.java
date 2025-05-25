@@ -64,4 +64,22 @@ public class EventPrivateController {
         return ResponseEntity.ok().body(requestService.updateRequests(userId, eventId, updateRequest));
     }
 
+    @GetMapping("/like")
+    public ResponseEntity<List<EventShortDto>> getAllLikedEvents(@PathVariable Integer userId) {
+        return ResponseEntity.ok().body(eventService.getAllLikedEvents(userId));
+    }
+
+    @PostMapping("/{eventId}/like")
+    public ResponseEntity<Long> addLike(@PathVariable(name = "eventId") Integer eventId,
+                                        @PathVariable(name = "userId") Integer userId) {
+        return ResponseEntity.ok().body(eventService.addLike(eventId, userId));
+    }
+
+    @DeleteMapping("/{eventId}/like")
+    public ResponseEntity<Long> removeLike(@PathVariable(name = "eventId") Integer eventId,
+                                           @PathVariable(name = "userId") Integer userId) {
+        eventService.removeLike(userId, eventId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

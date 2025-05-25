@@ -28,4 +28,10 @@ public class Like {
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Like(User user, Event event) {
+        this.id = new LikeId(user.getId(), event.getId());
+        this.event = event;
+        this.user = user;
+    }
 }

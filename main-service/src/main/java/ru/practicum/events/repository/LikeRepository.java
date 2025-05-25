@@ -5,6 +5,18 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.events.model.Like;
 import ru.practicum.events.model.LikeId;
 
+import java.util.List;
+
 @Repository
 public interface LikeRepository extends JpaRepository<Like, LikeId> {
+
+    boolean existsByUserIdAndEventId(Integer userId, Integer eventId);
+
+    void deleteByUserIdAndEventId(Integer userId, Integer eventId);
+
+    Long countByEventId(Integer eventId);
+
+    List<Like> findAllByEventId(Integer eventId);
+
+    List<Like> findAllByUserId(Integer userId);
 }
