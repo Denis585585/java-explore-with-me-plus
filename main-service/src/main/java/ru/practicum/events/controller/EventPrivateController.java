@@ -65,7 +65,7 @@ public class EventPrivateController {
     }
 
     @GetMapping("/like")
-    public ResponseEntity<List<EventShortDto>> getAllLikedEvents(@PathVariable Integer userId) {
+    public ResponseEntity<List<EventShortDto>> getAllLikedEvents(@PathVariable(name = "userId") Integer userId) {
         return ResponseEntity.ok().body(eventService.getAllLikedEvents(userId));
     }
 
