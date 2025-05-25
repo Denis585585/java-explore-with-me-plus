@@ -260,7 +260,9 @@ public class EventServiceImpl implements EventService {
         User user = getUser(userId);
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(String.format("Event with ID=%d was not found", eventId)));
-
+        if (event.getState() != EventState.PUBLISHED) {
+            throw new NotFoundException(String.format("Event with id=%d was not published", eventId));
+        }
         if (!likeRepository.existsByUserIdAndEventId(userId, eventId)) {
             Like like = new Like(user, event);
             likeRepository.save(like);
@@ -280,9 +282,14 @@ public class EventServiceImpl implements EventService {
     public List<UserShortDto> getLikedUsers(Integer eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(String.format("Event with ID=%d was not found", eventId)));
+        if (event.getState() != EventState.PUBLISHED) {
+            throw new NotFoundException(String.format("Event with id=%d was not published", eventId));
+        }
         addViews("/events/" + event.getId(), event);
         List<Like> likes = likeRepository.findAllByEventId(eventId);
-        return likes.stream().map(like -> userMapper.toUserShortDto(like.getUser())).toList();
+        return likes.stream()
+                .map(like -> userMapper.toUserShortDto(like.getUser()))
+                .toList();
     }
 
     @Override
